@@ -23,8 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const participants = details.participants.length
           ? `<ul>${details.participants
               .map(
-                (participant) =>
-                  `<li><span>${participant}</span><button type="button" class="participant-remove" data-email="${encodeURIComponent(participant)}" aria-label="Remove ${participant}" title="Remove participant">&#128465;</button></li>`
+                (participant) => {
+                  const escapedParticipant = participant
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+                  return `<li><span>${escapedParticipant}</span><button type="button" class="participant-remove" data-email="${encodeURIComponent(participant)}" aria-label="Remove ${escapedParticipant}" title="Remove participant">&#128465;</button></li>`;
+                }
               )
               .join("")}</ul>`
           : '<p class="no-participants">No participants yet</p>';
